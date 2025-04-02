@@ -15,6 +15,7 @@ bot = commands.Bot(
     activity=disnake.Game(name="Seelen sammeln 👀")
 )
 
+
 EVIL_REACTIONS = [
     "MUAHAHA! {user} WAGT ES MICH ZU PINGEN?! DIE HÖLLE ERWARTET DICH! 👹",
     "BEI ALLEN DÄMONEN! {user} STÖRT MEINE FINSTERE ARBEIT! 💀",
