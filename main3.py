@@ -10,32 +10,15 @@ from reactions import EVIL_REACTIONS, EVIL_COMMAND_RESPONSES
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-# Bot-Einstellungen für Installierbarkeit
 bot = commands.Bot(
     command_prefix="!",
     intents=disnake.Intents.all(),
-    activity=disnake.Game(name="Seelen sammeln 👀"),
-    # Wichtig für Installierbarkeit:
-    application_id=os.getenv("APPLICATION_ID"),  # Füge dies zu deiner .env hinzu
+    activity=disnake.Game(name="Seelen sammeln 👀")
 )
-
-# Installations-URL generieren
-def get_invite_url():
-    return disnake.utils.oauth_url(
-        bot.application_id,
-        permissions=disnake.Permissions(
-            send_messages=True,
-            read_messages=True,
-            use_slash_commands=True,
-            add_reactions=True
-        ),
-        scopes=("bot", "applications.commands")  # Wichtig für Slash Commands
-    )
 
 @bot.event
 async def on_ready():
     print(f"{bot.user.name} bereit zum Weltuntergang! 🔥")
-    print(f"Lade Benutzer ein mit dieser URL: {get_invite_url()}")
 
 @bot.event
 async def on_message(message):
@@ -73,12 +56,6 @@ async def info(interaction: disnake.ApplicationCommandInteraction):
         value="• 500+ Evil Reactions\n• /evil Command\n• Open Source",
         inline=False
     )
-    # Installations-URL hinzufügen
-    embed.add_field(
-        name="Bot hinzufügen",
-        value=f"[Klicke hier]({get_invite_url()}) um mich zu deinem Server hinzuzufügen!",
-        inline=False
-    )
     await interaction.response.send_message(embed=embed)
 
 @bot.slash_command(name="github", description="GitHub Repository")
@@ -103,21 +80,6 @@ async def sync(interaction: disnake.ApplicationCommandInteraction):
         await interaction.response.send_message("🦉✅ **Befehle gesynct!**", ephemeral=True)
     else:
         await interaction.response.send_message("🚫 Nur der Bot-Besitzer kann das!", ephemeral=True)
-
-# Neuer Command für Installations-URL
-@bot.slash_command(name="invite", description="Lade den Bot auf deinen Server ein!")
-async def invite(interaction: disnake.ApplicationCommandInteraction):
-    embed = disnake.Embed(
-        title="🦉 Lade den Evil Owl Bot ein!",
-        description=f"[Klicke hier um mich einzuladen]({get_invite_url()})",
-        color=0x8B0000
-    )
-    embed.add_field(
-        name="Voraussetzungen",
-        value="• Du benötigst Administrator-Rechte oder die Berechtigung 'Bot hinzufügen' auf dem Server",
-        inline=False
-    )
-    await interaction.response.send_message(embed=embed)
 
 try:
     bot.run(TOKEN)
